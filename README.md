@@ -29,6 +29,7 @@ npm test
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+## install Vue
 
 1,安装node.js:
 
@@ -43,3 +44,7 @@ npm: Nodejs下的包管理器。由于国内使用npm会很慢,这里推荐使�
 3,安装vue-cli脚手架构建工具
 
 npm install -g vue-cli
+
+## Vue lifecycle
+
+![img](./src/assets/lifecycle.png)
