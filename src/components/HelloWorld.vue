@@ -16,7 +16,7 @@
   <body id = "seeBody">
     <p id="textSee">{{seeText}}</p>
   </body>
-  <button v-on:click="button_1()">点我</button>
+  <button v-on:click="button_1()">使劲点我</button>
 </div>
 </template>
 
