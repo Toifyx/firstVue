@@ -24,18 +24,32 @@
     <div id="app-4">
       <ol>
         <Div
-          v-bind:class="{classObjectA:todo.index==0,classObjectB:todo.index==1, classObjectC:todo.index==2}"
-          v-for="(todo) in todos"
-          v-bind:key="todo"
+          v-bind:class="{classObjectA:index==0,classObjectB:index==1, classObjectC:index==2}"
+          v-for="(todo, index) in todos"
+          v-bind:key="index"
         >{{ todo.text}}</Div>
       </ol>
     </div>
     <button @click="button_2(circle++,todos)">点我旋转</button>
+    <button @click="gotolink" class="btn btn-success">点击跳转页面</button>
+
+
+  </body>
+  <body>
+    <div id="watch-example">
+      <p>
+        Ask a yes/no question:
+        <input v-model="question" />
+      </p>
+      <p>{{ answer }}</p>
+    </div>
   </body>
 </div>
 </template>
 
 <script>
+import {shuffle} from '../js/utils.js'
+
 export default {
   name: "HelloWorld",
   seeFlg: true,
@@ -48,36 +62,66 @@ export default {
       seeText: "现在你看到我了",
       seeFlg: true,
       todos: [
-        { text: "学习 JavaScript", index: 0 },
-        { text: "学习 Vue", index: 1 },
-        { text: "整个牛项目", index: 2 }
+        { text: "学习 JavaScript" },
+        { text: "学习 Vue" },
+        { text: "整个牛项目" }
       ],
-      circle: 0
+      circle: 0,
+      question: '',
+      answer: 'I cannot give you an answer until you ask a question!'
     };
   },
-  created: function () {
-    // 
-    console.log('a is: ' + this.name)
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    question: function (newQuestion, oldQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.debouncedGetAnswer()
+    }
+  },
+  created: function() {
+    //
+    // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+    // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+    // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+    // 请参考：https://lodash.com/docs#debounce
+    // this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
   },
   computed: {},
   methods: {
     button_1: function() {
       if (this.seeFlg) {
-        this.seeFlg = false
+        this.seeFlg = false;
       } else {
-        this.seeFlg = true
+        this.seeFlg = true;
       }
     },
-    button_2: function(circle, todos) {
-      var tmp = circle % 3
-      document.getElementsByClassName('classObjectA')[0].innerHTML =
-        todos[tmp++ % 3].text
-      document.getElementsByClassName('classObjectB')[0].innerHTML =
-        todos[tmp++ % 3].text
-      document.getElementsByClassName('classObjectC')[0].innerHTML =
-        todos[tmp++ % 3].text
-      console.log(document.getElementsByClassName("classObjectA"))
-    }
+    button_2: function() {
+      this.todos = shuffle(this.todos);
+    },
+    getAnswer: function () {
+      if (this.question.indexOf('?') === -1) {
+        this.answer = 'Questions usually contain a question mark. ;-)'
+        return
+      }
+      this.answer = 'Thinking...'
+      var vm = this
+      axios.get('https://yesno.wtf/api')
+        .then(function (response) {
+          vm.answer = _.capitalize(response.data.answer)
+        })
+        .catch(function (error) {
+          vm.answer = 'Error! Could not reach the API. ' + error
+        })
+    },
+    gotolink(){
+          //点击跳转至上次浏览页面
+         // this.$router.go(-1)
+
+          //指定跳转地址
+          this.$router.replace('/mkmweb')
+        }
+
   }
 };
 </script>
