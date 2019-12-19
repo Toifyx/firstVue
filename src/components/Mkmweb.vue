@@ -21,10 +21,16 @@ export default {
       this.$refs.generateForm.getData().then(data => {
         console.log(data);
         this.$http({
-              url: this.$http.adornUrl('/sys/login'),
-              method: 'post',
-              data: this.$http.adornData(data)
-            })
+          url: this.$http.adornUrl("/simulator"),
+          method: "post",
+          data: this.$http.adornData(data)
+        }).then(({ data }) => {
+          if (data && data.msgCd === "OPR00000") {
+            alert(data.msgCd);
+          } else {
+            this.$message.error(data.msgInfo);
+          }
+        });
       });
     }
   },

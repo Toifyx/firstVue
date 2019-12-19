@@ -31,24 +31,24 @@
       </ol>
     </div>
     <button @click="button_2(circle++,todos)">点我旋转</button>
-    <button @click="gotolink" class="btn btn-success">点击跳转页面</button>
-
-
-  </body>
-  <body>
-    <div id="watch-example">
-      <p>
-        Ask a yes/no question:
-        <input v-model="question" />
-      </p>
-      <p>{{ answer }}</p>
+    <div>
+      <button @click="gotolink('mkmweb')" class="btn btn-success">mkmweb</button>
+    </div>
+    <div>
+      <button @click="gotolink('orderQuery')" class="btn btn-success">oderQeury</button>
+    </div>
+        <div>
+      <button @click="gotolink('ccDirectPay')" class="btn btn-success">ccDirectPay</button>
+    </div>
+        <div>
+      <button @click="gotolink('hongbao')" class="btn btn-success">hongbao</button>
     </div>
   </body>
 </div>
 </template>
 
 <script>
-import {shuffle} from '../js/utils.js'
+import { shuffle } from "../js/utils.js";
 
 export default {
   name: "HelloWorld",
@@ -67,16 +67,9 @@ export default {
         { text: "整个牛项目" }
       ],
       circle: 0,
-      question: '',
-      answer: 'I cannot give you an answer until you ask a question!'
     };
   },
   watch: {
-    // 如果 `question` 发生改变，这个函数就会运行
-    question: function (newQuestion, oldQuestion) {
-      this.answer = 'Waiting for you to stop typing...'
-      this.debouncedGetAnswer()
-    }
   },
   created: function() {
     //
@@ -99,29 +92,10 @@ export default {
     button_2: function() {
       this.todos = shuffle(this.todos);
     },
-    getAnswer: function () {
-      if (this.question.indexOf('?') === -1) {
-        this.answer = 'Questions usually contain a question mark. ;-)'
-        return
-      }
-      this.answer = 'Thinking...'
-      var vm = this
-      axios.get('https://yesno.wtf/api')
-        .then(function (response) {
-          vm.answer = _.capitalize(response.data.answer)
-        })
-        .catch(function (error) {
-          vm.answer = 'Error! Could not reach the API. ' + error
-        })
-    },
-    gotolink(){
-          //点击跳转至上次浏览页面
-         // this.$router.go(-1)
 
-          //指定跳转地址
-          this.$router.replace('/mkmweb')
-        }
-
+    gotolink(url) {
+      this.$router.replace("/" + url);
+    }
   }
 };
 </script>
